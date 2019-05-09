@@ -135,7 +135,7 @@ namespace aicore {
 			const size_type * stride_dimensions,
 			const size_type * padding_dimensions,
 			const size_type * dilation_dimensions,
-			size_type rank
+			const size_type rank
 		)
 		{
 			const size_type& channels = input_dimensions[0];

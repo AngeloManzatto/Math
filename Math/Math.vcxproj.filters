@@ -30,6 +30,15 @@
     <ClInclude Include="test\convolution_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="math\padding.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\padding_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math\functional.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\convolution_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\padding_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
