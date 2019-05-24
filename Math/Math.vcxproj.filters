@@ -36,7 +36,10 @@
     <ClInclude Include="test\padding_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="math\functional.h">
+    <ClInclude Include="math\algebra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\algebra_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test\padding_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\algebra_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

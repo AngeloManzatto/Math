@@ -116,9 +116,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="math\convolution.h" />
-    <ClInclude Include="math\functional.h" />
+    <ClInclude Include="math\algebra.h" />
     <ClInclude Include="math\padding.h" />
     <ClInclude Include="math\pooling.h" />
+    <ClInclude Include="test\algebra_test.h" />
     <ClInclude Include="test\convolution_test.h" />
     <ClInclude Include="test\padding_test.h" />
     <ClInclude Include="test\pooling_test.h" />
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test\algebra_test.cpp" />
     <ClCompile Include="test\convolution_test.cpp" />
     <ClCompile Include="test\padding_test.cpp" />
     <ClCompile Include="test\pooling_test.cpp" />
