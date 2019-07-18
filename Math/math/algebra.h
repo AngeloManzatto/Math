@@ -1,17 +1,39 @@
+/*
+*
+* Artificial Intelligence Library
+*
+* Copyright (C) 2019 by Angelo Antonio Manzatto
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+**/
+
 template<typename value_type, typename size_type>
 value_type dot_product
 (
-	const value_type * inputs_a, const size_type  input_strides_a,
-	const value_type * inputs_b, const size_type  input_strides_b,
-	const size_type size
+	const value_type * inputs_a, const size_type  input_dimensions_a, const size_type  input_strides_a,
+	const value_type * inputs_b, const size_type  input_dimensions_b, const size_type  input_strides_b
 )
 {
+	size_type size = (input_dimensions_a >= input_dimensions_b) ? input_dimensions_a : input_dimensions_b;
+
 	value_type sum = value_type();
-	for (size_type i = 0; i < size; i++, inputs_a += input_strides_a,inputs_b += input_strides_b)
+	for (size_type i = 0; i < size; i++, inputs_a += input_strides_a * (input_dimensions_a > 1) ,inputs_b += input_strides_b * (input_dimensions_b > 1))
 	{
 		sum += (*inputs_a) * (*inputs_b);
 	}
-
+	
 	return sum;
 }
 
@@ -27,9 +49,11 @@ void inner_product
 	{
 		for (size_type j = 0; j < input_dimensions_b[1]; j++, inputs_b += input_strides_b[1])
 		{
-			*outputs++ = dot_product(inputs_a, input_strides_a[1], inputs_b, input_strides_b[0], input_dimensions_b[0]);
+			*outputs++ = dot_product(inputs_a, input_dimensions_a[1], input_strides_a[1],
+				                     inputs_b, input_dimensions_b[0], input_strides_b[0]);
 		}
 
+		// Reset pointer position
 		inputs_b -= input_dimensions_b[1];
 
 	}
@@ -86,18 +110,39 @@ void matrix_mult
 	      value_type * outputs,   const size_type * output_dimensions,   const size_type * output_strides,  const size_type rank_o
 )
 {
-	/*if (rank_a==1 and rank_b=1)
+	if (rank_a==1 && rank_b==1)
 	{
-		outputs[0] = dot_product<value_type, size_type>(inputs_a, input_strides_a[0], inputs_b, input_strides_b[0], output_dimensions[0]);
+		*outputs = dot_product<value_type, size_type>(inputs_a, input_dimensions_a[0], input_strides_a[0],
+													  inputs_b, input_dimensions_b[0], input_strides_b[0]);
 	}
-	else 
+	else if (rank_a == 1 && rank_b == 2)
 	{
-	*/
+		
+		size_type input_dimension_t[2] = { 1, input_dimensions_a[0] };
+		size_type input_strides_t[2] = { input_strides_a[0], 1 };
+
+		inner_product<value_type, size_type>(inputs_a, input_dimension_t, input_strides_t,
+										     inputs_b, input_dimensions_b, input_strides_b,
+											 outputs,  output_dimensions, output_strides);
+
+	}
+	else if (rank_a == 2 && rank_b == 1)
+	{
+		size_type input_dimension_t[2] = { input_dimensions_b[0], 1 };
+		size_type input_strides_t[2] = { 1, 1 };
+
+		inner_product<value_type, size_type>(inputs_a, input_dimensions_a, input_strides_a,
+											 inputs_b, input_dimension_t, input_strides_t,
+										     outputs,  output_dimensions, output_strides);
+	}
+	else
+	{
+	
 		matrix_mult_recursive< value_type, size_type>(
 			inputs_a, input_dimensions_a, input_strides_a,
 			inputs_b, input_dimensions_b, input_strides_b,
 			outputs, output_dimensions, output_strides,
 			rank_o
 			);
-	//}
+	}
 }

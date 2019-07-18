@@ -4,12 +4,7 @@
 
 #include "..\math\algebra.h"
 #include "..\utils\print_tensor.h"
-
-template<typename size_type = int>
-void broadcast(size_type * dimensions_a, size_type * dimensions_b, size_type rank_a, size_type rank_b)
-{
-
-}
+#include "..\utils\tensor_utils.h"
 
 void matrix_test()
 {
@@ -96,4 +91,308 @@ void matrix_test()
 	std::cout << "==================================================================" << "\n\n";
 
 	print_tensor(outputs, rank_b, output_dimensions, output_strides);
+}
+
+void matrix_test_case_1()
+{
+	// Tensor A
+
+	// Rank
+	const int rank_a = 1;
+
+	// Dimension
+	const int input_width_a = 6;
+	int input_dimensions_a[rank_a] = { input_width_a };
+
+	// Stride
+	int input_strides_a[rank_a] = { 1 };
+
+	// Initialize Input
+	float inputs_a[input_width_a] = { 0 };
+	generate_sequence(inputs_a, input_width_a);
+
+	// Tensor B
+	const int rank_b = 1;
+
+	// Rank
+	const int input_width_b = 1;
+
+	// Dimension
+	int input_dimensions_b[rank_b] = {  input_width_b };
+	int input_strides_b[rank_b] = { 1 };
+
+	// Initialize Input
+	float inputs_b[input_width_b] = { 6 };
+	//generate_sequence(inputs_b, input_width_b);
+
+	// Tensor Output
+
+	// Rank
+	const int rank_o = 1;
+
+	// Dimension
+	const int input_width_o = 1;
+	int input_dimensions_o[rank_o] = { input_width_o};
+
+	// Stride
+	int input_strides_o[rank_o] = { 1 };
+
+	// Initialize Tensor
+	float inputs_o[input_width_o] = { 0 };
+
+	// Check constraints
+	assert(check_broadcast(input_dimensions_a, input_dimensions_b, rank_a));
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor A" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_a, rank_a, input_dimensions_a, input_strides_a);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_b, rank_b, input_dimensions_b, input_strides_b);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Dot Product Tensor A * Tensor B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+
+	auto a = dot_product(inputs_a, input_width_a, input_strides_a[0], inputs_b, input_width_b, input_strides_b[0]);
+
+	std::cout << a << "\n";
+
+	matrix_mult(inputs_a, input_dimensions_a, input_strides_a, rank_a,
+				inputs_b, input_dimensions_b, input_strides_b, rank_b,
+		        inputs_o, input_dimensions_o, input_strides_o, rank_o);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Tensor Output" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_o, rank_o, input_dimensions_o, input_strides_o);
+	
+}
+
+void matrix_test_case_2()
+{
+	// Tensor A
+
+	// Rank
+	const int rank_a = 2;
+
+	// Dimension
+	const int input_height_a = 2;
+	const int input_width_a = 6;
+	const int input_size_a = input_height_a * input_width_a;
+
+	int input_dimensions_a[rank_a] = { input_height_a, input_width_a };
+	int input_strides_a[rank_a] = { 0 };
+
+	float inputs_a[input_size_a] = { 0 };
+
+	calculate_strides(input_dimensions_a, input_strides_a, rank_a);
+	generate_sequence(inputs_a, input_size_a);
+
+	// Tensor B
+
+	// Rank
+	const int rank_b = 2;
+
+	// Dimension
+	const int input_height_b = 6;
+	const int input_width_b = 3;
+	const int input_size_b = input_height_b * input_width_b;
+
+	int input_dimensions_b[rank_b] = { input_height_b, input_width_b };
+	int input_strides_b[rank_b] = { 0 };
+
+	float inputs_b[input_size_b] = { 0 };
+
+	calculate_strides(input_dimensions_b, input_strides_b, rank_b);
+	generate_sequence(inputs_b, input_size_b);
+
+	// Tensor Output
+
+	// Rank
+	const int rank_o = 2;
+
+	// Dimension
+	const int input_height_o = input_height_a;
+	const int input_width_o = input_width_b;
+	const int input_size_o = input_height_o * input_width_o;
+
+	int input_dimensions_o[rank_o] = { input_height_o, input_width_o };
+	int input_strides_o[rank_o] = { 0 };
+
+	float inputs_o[input_size_o] = { 0 };
+
+	calculate_strides(input_dimensions_o, input_strides_o, rank_o);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor A" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_a, rank_a, input_dimensions_a, input_strides_a);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_b, rank_b, input_dimensions_b, input_strides_b);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Inner Product Matrix A * Matrix B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+
+	inner_product(inputs_a, input_dimensions_a, input_strides_a,
+			      inputs_b, input_dimensions_b, input_strides_b,
+		          inputs_o, input_dimensions_o, input_strides_o);
+
+	print_tensor(inputs_o, rank_o, input_dimensions_o, input_strides_o);
+}
+
+void matrix_test_case_3()
+{
+	// Tensor A
+
+	// Rank
+	const int rank_a = 1;
+
+	// Dimension
+	const int input_width_a = 6;
+	int input_dimensions_a[rank_a] = { input_width_a };
+
+	// Stride
+	int input_strides_a[rank_a] = { 1 };
+
+	// Initialize Input
+	float inputs_a[input_width_a] = { 0 };
+	generate_sequence(inputs_a, input_width_a);
+
+	// Tensor B
+
+	// Rank
+	const int rank_b = 2;
+
+	// Dimension
+	const int input_height_b = 6;
+	const int input_width_b = 3;
+	const int input_size_b = input_height_b * input_width_b;
+
+	int input_dimensions_b[rank_b] = { input_height_b, input_width_b };
+	int input_strides_b[rank_b] = { 0 };
+
+	float inputs_b[input_size_b] = { 0 };
+
+	calculate_strides(input_dimensions_b, input_strides_b, rank_b);
+	generate_sequence(inputs_b, input_size_b);
+
+	// Tensor Output
+
+	// Rank
+	const int rank_o = 2;
+
+	// Dimension
+	const int input_height_o = 1;
+	const int input_width_o = input_width_b;
+	const int input_size_o = input_height_o * input_width_o;
+
+	int input_dimensions_o[rank_o] = { input_height_o, input_width_o };
+	int input_strides_o[rank_o] = { 0 };
+
+	float inputs_o[input_size_o] = { 0 };
+
+	calculate_strides(input_dimensions_o, input_strides_o, rank_o);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor A" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_a, rank_a, input_dimensions_a, input_strides_a);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_b, rank_b, input_dimensions_b, input_strides_b);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Vector A * Matrix B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+
+	matrix_mult(inputs_a, input_dimensions_a, input_strides_a, rank_a,
+		        inputs_b, input_dimensions_b, input_strides_b, rank_b,
+		        inputs_o, input_dimensions_o, input_strides_o, rank_o);
+
+	print_tensor(inputs_o, rank_o, input_dimensions_o, input_strides_o);
+}
+
+void matrix_test_case_4()
+{
+	// Tensor A
+
+	// Rank
+	const int rank_a = 2;
+
+	// Dimension
+	const int input_height_a = 6;
+	const int input_width_a = 3;
+	const int input_size_a = input_height_a * input_width_a;
+
+	int input_dimensions_a[rank_a] = { input_height_a, input_width_a };
+	int input_strides_a[rank_a] = { 0 };
+
+	float inputs_a[input_size_a] = { 0 };
+
+	calculate_strides(input_dimensions_a, input_strides_a, rank_a);
+	generate_sequence(inputs_a, input_size_a);
+
+	// Tensor B
+
+	// Rank
+	const int rank_b = 1;
+
+	// Dimension
+	const int input_width_b = 3;
+	int input_dimensions_b[rank_b] = { input_width_b };
+
+	// Stride
+	int input_strides_b[rank_b] = { 1 };
+
+	// Initialize Input
+	float inputs_b[input_width_b] = { 0 };
+	generate_sequence(inputs_b, input_width_b);
+
+
+	// Tensor Output
+
+	// Rank
+	const int rank_o = 2;
+
+	// Dimension
+	const int input_height_o = input_height_a;
+	const int input_width_o = 1;
+	const int input_size_o = input_height_o * input_width_o;
+
+	int input_dimensions_o[rank_o] = { input_height_o, input_width_o };
+	int input_strides_o[rank_o] = { 0 };
+
+	float inputs_o[input_size_o] = { 0 };
+
+	calculate_strides(input_dimensions_o, input_strides_o, rank_o);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor A" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_a, rank_a, input_dimensions_a, input_strides_a);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Input Tensor B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+	print_tensor(inputs_b, rank_b, input_dimensions_b, input_strides_b);
+
+	std::cout << "==================================================================" << "\n";
+	std::cout << "Matrix A * Vector B" << "\n";
+	std::cout << "==================================================================" << "\n\n";
+
+	matrix_mult(inputs_a, input_dimensions_a, input_strides_a, rank_a,
+				inputs_b, input_dimensions_b, input_strides_b, rank_b,
+			    inputs_o, input_dimensions_o, input_strides_o, rank_o);
+
+	print_tensor(inputs_o, rank_o, input_dimensions_o, input_strides_o);
 }

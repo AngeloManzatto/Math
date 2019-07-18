@@ -42,6 +42,15 @@
     <ClInclude Include="test\algebra_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tensor\tensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test\test_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\tensor_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

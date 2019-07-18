@@ -119,11 +119,14 @@
     <ClInclude Include="math\algebra.h" />
     <ClInclude Include="math\padding.h" />
     <ClInclude Include="math\pooling.h" />
+    <ClInclude Include="tensor\tensor.h" />
     <ClInclude Include="test\algebra_test.h" />
     <ClInclude Include="test\convolution_test.h" />
     <ClInclude Include="test\padding_test.h" />
     <ClInclude Include="test\pooling_test.h" />
+    <ClInclude Include="test\test_utils.h" />
     <ClInclude Include="utils\print_tensor.h" />
+    <ClInclude Include="utils\tensor_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

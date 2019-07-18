@@ -1,3 +1,24 @@
+/*
+*
+* Artificial Intelligence Library
+*
+* Copyright (C) 2019 by Angelo Antonio Manzatto
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+**/
+
 #include <iostream>
 
 namespace aicore {
@@ -138,30 +159,19 @@ namespace aicore {
 			const size_type rank
 		)
 		{
-			const size_type& channels = input_dimensions[0];
 
-			const size_type& input_channel_strides = input_strides[0];
-			const size_type& output_channel_stride = output_strides[0];
-
-			// Padding offset stores the padded values for each process step so we can ignore them 
 			int * padding_offset = new int[rank]();
 
-
-			for (size_type c = 0; c < channels; c++, outputs += output_channel_stride, inputs += input_channel_strides)
-			{
-
-				max_pooling_recursive<value_type, size_type>(
-					inputs,   input_dimensions + 1, input_strides  + 1,
-					outputs, output_dimensions + 1, output_strides + 1,
-					kernel_dimensions,
-					stride_dimensions,
-					padding_dimensions,
-					dilation_dimensions,
-					padding_offset,
-					rank
-					);
-			}
-
+			max_pooling_recursive<value_type, size_type>(
+				inputs,  input_dimensions, input_strides,
+				outputs, output_dimensions, output_strides,
+				kernel_dimensions,
+				stride_dimensions,
+				padding_dimensions,
+				dilation_dimensions,
+				padding_offset,
+				rank
+				);
 
 			// Free padding cache
 			delete[] padding_offset;
@@ -308,33 +318,23 @@ namespace aicore {
 			bool include_pad_count = false
 		)
 		{
-			const size_type& channels = input_dimensions[0];
-
-			const size_type& input_channel_strides = input_strides[0];
-			const size_type& output_channel_stride = output_strides[0];
 
 			// Padding offset stores the padded values for each process step so we can ignore them 
 			int * padding_offset = new int[rank]();
 
-
-			for (size_type c = 0; c < channels; c++, outputs += output_channel_stride, inputs += input_channel_strides)
-			{
-
-				avg_pooling_recursive<value_type, size_type>(
-					inputs, input_dimensions + 2, input_strides + 2,
-					outputs, output_dimensions + 2, output_strides + 2,
-					kernel_dimensions,
-					stride_dimensions,
-					padding_dimensions,
-					dilation_dimensions,
-					padding_offset,
-					rank,
-					0,
-					0, 
-					include_pad_count
-					);
-			}
-
+			avg_pooling_recursive<value_type, size_type>(
+				inputs, input_dimensions, input_strides,
+				outputs, output_dimensions, output_strides,
+				kernel_dimensions,
+				stride_dimensions,
+				padding_dimensions,
+				dilation_dimensions,
+				padding_offset,
+				rank,
+				0,
+				0, 
+				include_pad_count
+				);
 
 			// Free padding cache
 			delete[] padding_offset;
